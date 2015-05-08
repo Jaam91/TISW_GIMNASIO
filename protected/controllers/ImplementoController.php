@@ -28,7 +28,7 @@ class ImplementoController extends Controller
 				'actions'=>array('admin','delete'),
 				'roles'=>array('Administrador'),
 			),
-			array('deny',  // deny all users
+			array('deny',   // deny all users
 				'users'=>array('*'),
 			),
 		);
@@ -52,12 +52,12 @@ class ImplementoController extends Controller
 		$cont=0;
 		$model=new Implemento;
 		$historial=new GestionaImplemento;
-		//$grupoMuscular=GrupoMuscular::model()->findAll();
+		
 
 		$grupoMuscular = Implemento::model()->grupoMuscular();
 
 
-		//$grupoMuscular[$cont]->nombre = 'Z';
+		
 		$lista=Dependencia::model()->findAll(array('condition'=>'nombre<>:nombre AND estado=:estado',
 											       'params'=>array(':nombre'=>'*Gimnasio Central', ':estado'=>'habilitado')));
 
