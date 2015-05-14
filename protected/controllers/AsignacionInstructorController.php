@@ -26,7 +26,7 @@ class AsignacionInstructorController extends Controller
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete','lista', 'instructor','elegir','registrar','opcion'),
+				'actions'=>array('admin','delete','lista', 'instructor','elegir','registrar','opcion', 'asignar'),
 				'roles'=>array('Administrador'),
 			),
 			array('deny',  // deny all users
@@ -35,10 +35,10 @@ class AsignacionInstructorController extends Controller
 		);
 	}
 	
-	public function actionView($id)
+	public function actionView($id, $numero)
 	{
 		$this->render('view',array(
-			'model'=>$this->loadModel($id),
+			'model'=>$this->loadModel($id), 'numero'=>$numero,
 		));
 	}
 
@@ -51,6 +51,8 @@ class AsignacionInstructorController extends Controller
 	{
 		$model=new Usuario('search');
 		$model->unsetAttributes();
+		if(isset($_GET['Usuario']))
+			$model->attributes=$_GET['Usuario'];
 
 		$this->render('lista',array(
 			'model'=>$model,
@@ -60,13 +62,6 @@ class AsignacionInstructorController extends Controller
 	public function actionElegir($rut) // Recibe rut del cliente, ahora elegimos la Disciplina 
 	{
 		$model = new Disciplina;
-
-		$criteria = new CDbCriteria;
-		$criteria->select = 'nombre';
-		$criteria->condition = 'estado=:estado AND nombre<>:nom';
-		$criteria->params = array(':estado'=>'habilitado', 'nom'=>'Pagar Gimnasio');
-
-		$lista= Disciplina::model()->findAll($criteria);
 		$nombre = Usuario::model()->NombreCompleto($rut);
 
 		if(isset($_POST['Disciplina']))
@@ -74,19 +69,59 @@ class AsignacionInstructorController extends Controller
 			$model->attributes = $_POST['Disciplina'];
 			$this->redirect(array('instructor', 'disc'=>$model->nombre, 'nombre'=>$nombre, 'rut'=>$rut));
 		}
-		$this->render('_formDisciplina', array('model'=>$model, 'nombre'=>$nombre, 'lista'=>$lista));
+		$act = AsignacionInstructor::model()->listaActividadesArray($rut); // Actividades inscritas por el cliente
+		$contador = Actividad::model()->contarActividad();  // cantidad total de actividades Fitness
+		$p_trainer= AsignacionInstructor::model()->verificarPersonalTrainer($rut); // 1 si tiene personal trainer
+		
+		$cont= count($act);  // cantidad de actividades inscritas por el cliente
+		$contador= count($contador);
+
+		$array = array();
+		if($p_trainer != 1)
+		{
+			$array[0]= new AuxiliarPagoForm;
+			$array[0]->nombre= 'Musculación';
+
+			if($cont != $contador){
+				$array[1]= new AuxiliarPagoForm;
+				$array[1]->nombre= 'Fitness';
+			}
+			$actividad = AsignacionInstructor::model()->listaActividades($rut);
+			$this->render('_formDisciplina', array('model'=>$model, 'nombre'=>$nombre, 
+							'lista'=>$array, 'actividad'=>$actividad, 'p_trainer'=>$p_trainer));
+		}
+		else{
+			if($cont != $contador){
+				$array[0]= new AuxiliarPagoForm;
+				$array[0]->nombre= 'Fitness';
+				$actividad = AsignacionInstructor::model()->listaActividades($rut);
+				$this->render('_formDisciplina', array('model'=>$model, 'nombre'=>$nombre, 
+						'lista'=>$array, 'actividad'=>$actividad, 'p_trainer'=>$p_trainer));
+			}
+			else{
+				$actividad = AsignacionInstructor::model()->listaActividades($rut);
+				$this->render('error', array('nombre'=>$nombre, 
+						'actividad'=>$actividad, 'p_trainer'=>$p_trainer));
+			}
+		}
 
 	}
 
 	public function actionInstructor($disc, $nombre, $rut)
 	{
-		$model = new Usuario;
+		$model=new Usuario('search');
+		$model->unsetAttributes();  
+		if(isset($_GET['Usuario']))
+			$model->attributes=$_GET['Usuario'];
 
-		if($disc == "Musculación")
+		if($disc == "Musculación"){
 			$this->render('personal_t', array('model'=>$model, 'rut'=>$rut));
+		}
 
-		else
-			$this->render('instructor', array('model'=>$model, 'rut'=>$rut, 'aux'=>"121212-2"));
+		else{
+			$lista= Usuario::model()->instructores($rut);
+			$this->render('instructor', array('model'=>$model, 'rut'=>$rut, 'lista'=>$lista));
+		}
 	}
 
 	public function actionRegistrar($rut_instructor, $rut)
@@ -113,40 +148,58 @@ class AsignacionInstructorController extends Controller
 		$registro->estado = "habilitado";
 		if($registro->save()){
 
-			// Sumamos la cantidad de clientes de la actividad
-			$suma = Actividad::model()->findByPk($registro->id_actividad);
-			$suma->cantidad_clientes = $suma->cantidad_clientes + 1;
-			if($suma->save())		
-				$this->redirect(array('view', 'id'=>$registro->id_asignacion));
+			if($registro->id_actividad != NULL){
+				// Sumamos la cantidad de clientes de la actividad
+				$suma = Actividad::model()->findByPk($registro->id_actividad);
+				$suma->cantidad_clientes = $suma->cantidad_clientes + 1;
+
+				if($suma->save())		
+					$this->redirect(array('view', 'id'=>$registro->id_asignacion, 'numero'=>1));
+			}
+			else	
+				$this->redirect(array('view', 'id'=>$registro->id_asignacion, 'numero'=>1));
 		}
 	}
 
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$asignacion = $this->loadModel($id);
+		$model = new Usuario;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['AsignacionInstructor']))
-		{
-			$model->attributes=$_POST['AsignacionInstructor'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id_asignacion));
+		if($asignacion->id_actividad == NULL)
+			$tipo= 'Personal Trainer';
+		else{
+			$act = Actividad::model()->findByPk($asignacion->id_actividad);
+			$tipo= $act->nombre;
 		}
 
-		$this->render('update',array(
+		$this->render('_formInstructor',array(
 			'model'=>$model,
+			'tipo'=>$tipo,
+			'id'=>$asignacion->id_asignacion,
+			'rut'=>$asignacion->rut_instructor,
 		));
+	}
+
+	public function actionAsignar($id, $rut_instructor)  // Se asigna el nuevo instructor
+	{
+		$model = $this->loadModel($id);
+		$model->rut_instructor = $rut_instructor;
+
+		if($model->save())
+			$this->redirect(array('view', 'id'=>$id, 'numero'=>2));
 	}
 
 	public function actionDelete($id)
 	{
-		$this->loadModel($id)->delete();
+		$model = $this->loadModel($id);
+		$model->estado = "eliminado";
+		if($model->save()){
+			if(!isset($_GET['ajax']))
+						$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 
-		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-		if(!isset($_GET['ajax']))
-			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}
+		
 	}
 
 	public function actionAdmin()

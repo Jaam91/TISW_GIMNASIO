@@ -31,13 +31,24 @@ $this->menu=array(
 		'rut_usuario',
 		array(
    			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
+   			'value' =>'$data->primer_nombre',
 		),
-		#'telefono_emergencia',
-		#'peso',
-		#'altura',
-		#'enfermedades_previas',
+		array(
+   			'name'=>'primer_apellido',
+   			'value' =>'$data->primer_apellido',
+		),
+		array(
+			'name'=>'telefono',
+			'value' =>'$data->cliente->telefono_emergencia',
+		),
+		array(
+			'name'=>'peso',
+			'value' =>'$data->cliente->peso',
+		),		
+		array(
+			'name'=>'altura',
+			'value' =>'$data->cliente->altura',
+		),
 		array(
             'class' => 'CButtonColumn',
             'template'=>'{update}{eliminar}',
@@ -45,12 +56,13 @@ $this->menu=array(
 				"update"=>array(
             			'label' => 'modificar',
             			'imageUrl'=>'images/modificar.png',
+            			'url'=>'CHtml::normalizeUrl(array("updateCliente","id"=>$data->primarykey))',
                         ),
 				"eliminar"=>array(					
             	            'label'=>'eliminar', // titulo del enlace del botón nuevo
             	            'click'=>'function(){return confirm("¿Está seguro que desea eliminar este Cliente?");}',
 		    				'imageUrl'=>'images/eliminar.png',
-           					'url'=>'CHtml::normalizeUrl(array("delete","id"=>$data->primarykey))',        					
+           					'url'=>'CHtml::normalizeUrl(array("deleteCliente","id"=>$data->primarykey))',        					
 						),
 
           		),

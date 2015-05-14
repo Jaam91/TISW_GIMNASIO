@@ -16,4 +16,5 @@ $this->menu=array(
 
 <h2>Ingresar Usuario de Personal</h2>
 
-<?php $this->renderPartial('_formPersonal', array('model'=>$model, 'lista'=>$lista, 'admin'=>$admin, 'actividad'=>$actividad)); ?>
+<?php $this->renderPartial('_formPersonal', array('model'=>$model, 'lista'=>$lista, 'id'=>0,
+												'admin'=>$admin, 'actividad'=>$actividad)); ?>

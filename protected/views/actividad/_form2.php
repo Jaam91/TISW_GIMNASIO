@@ -28,13 +28,6 @@
 		<?php echo $form->error($model,'id_disciplina'); ?>
 	</div>
 
-	<div id="instructor" class="row">
-		<?php echo $form->labelEx($model,'Instructor'); ?>
-		<?php echo $form->dropDownList($model,'rut_instructor', CHtml::listData($lista_i, 'rut_usuario', 'primer_nombre'), array('empty'=>'Seleccione')); ?>
-		<?php echo $form->error($model,'rut_instructor'); ?>
-	</div>
-
-
 	<div class="row">
 		<?php echo $form->labelEx($model,'Dependencia'); ?>
 		<?php echo $form->dropDownList($model,'id_dependencia', CHtml::listData($lista_d, 'id_dependencia', 'nombre'), array('empty'=>'Seleccione')); ?>

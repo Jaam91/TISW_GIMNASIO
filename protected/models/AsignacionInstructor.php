@@ -3,15 +3,17 @@
 
 class AsignacionInstructor extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
+	public $id_dependencia;
+	public $nombre_actividad;
+	public $nombre_cliente;
+	public $apellido_cliente;
+	public $nombre_instructor;
+	public $apellido_instructor;
+
 	public function tableName()
 	{
 		return 'asignacion_instructor';
 	}
-
-	public $id_dependencia;
 
 
 	public function rules()
@@ -26,7 +28,8 @@ class AsignacionInstructor extends CActiveRecord
 			array('estado', 'length', 'max'=>12),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_asignacion, rut_instructor, rut_cliente, id_actividad, estado', 'safe', 'on'=>'search'),
+			array('id_asignacion, rut_instructor, rut_cliente, id_actividad, estado, nombre_actividad, 
+			nombre_cliente, apellido_cliente, nombre_instructor,apellido_instructor','safe', 'on'=>'search'),
 		);
 	}
 
@@ -51,21 +54,25 @@ class AsignacionInstructor extends CActiveRecord
 			'rut_cliente' => 'Nombre Cliente',
 			'id_actividad' => 'Actividad',
 			'estado' => 'Estado',
+			'nombre_actividad' => 'Actividad',
+			'nombre_cliente' => 'Nombre Cliente'
 		);
 	}
 
 
 	public function search()
-	{
-		
+	{	
 
 		$criteria=new CDbCriteria;
+		$criteria->with = array('actividad0', 'rutCliente', 'rutInstructor');
 
-		$criteria->compare('id_asignacion',$this->id_asignacion);
-		$criteria->compare('rut_instructor',$this->rut_instructor,true);
-		$criteria->compare('rut_cliente',$this->rut_cliente,true);
+		$criteria->compare('t.rut_instructor',$this->rut_instructor,true);
+		$criteria->compare('t.rut_cliente',$this->rut_cliente,true);
 		$criteria->compare('id_actividad',$this->id_actividad,true);
-		$criteria->compare('estado','=habilitado',true);
+		$criteria->compare('actividad0.nombre',$this->nombre_actividad,true);
+		$criteria->compare('rutInstructor.profesion',$this->nombre_cliente,true);
+
+		$criteria->compare('t.estado','=habilitado',true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -74,17 +81,26 @@ class AsignacionInstructor extends CActiveRecord
 
 	public function listaActividades($rut)  // Lista de actividades inscritas de un cliente
 	{
-
 		$criteria=new CDbCriteria;
-
 		$criteria->compare('rut_cliente',$rut,true);
 		$criteria->compare('id_actividad','<>NULL',true);
 		$criteria->compare('id_dependencia',$this->id_dependencia,true);
 		$criteria->compare('estado','=habilitado',true);
 
-		return new CActiveDataProvider($this, array(
+		return new CActiveDataProvider($this, array( // EN UN DATA PROVIDER
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function listaActividadesArray($rut)  // Lista de actividades inscritas de un cliente
+	{
+		$actividad = Actividad::model()->tableName();
+		$criteria = new CDbCriteria;
+		$criteria->select = 't.id_actividad';
+		$criteria->join= 'left join '.$actividad.' A on (A.id_actividad = t.id_actividad)';
+		$criteria->condition ='t.estado=:estado AND rut_cliente=:rut AND t.id_actividad<>:act';
+		$criteria->params = array(':estado'=>'habilitado', ':rut'=>$rut, ':act'=>'NULL');
+		return AsignacionInstructor::model()->findAll($criteria);
 	}
 
 
@@ -127,5 +143,6 @@ class AsignacionInstructor extends CActiveRecord
 				return 1;
 		}
 	}
+
 
 }

@@ -20,20 +20,27 @@ $this->menu=array(
 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'cliente-grid',
+	'id'=>'clientelista-grid',
 	'dataProvider'=>$model->search("Cliente","habilitado"),
 	'filter'=>$model,
 	'columns'=>array(
 		'rut_usuario',
 		array(
    			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
+   			'value' =>'$data->primer_nombre',
 		),
-		#'telefono_emergencia',
-		#'peso',
-		#'altura',
-		#'enfermedades_previas',
+		array(
+   			'name'=>'primer_apellido',
+   			'value' =>'$data->primer_apellido',
+		),
+		array(
+			'name'=>'peso',
+			'value' =>'$data->cliente->peso',
+		),		
+		array(
+			'name'=>'altura',
+			'value' =>'$data->cliente->altura',
+		),
 		array(
             'class' => 'CButtonColumn',
             'template'=>'{asistencia}',

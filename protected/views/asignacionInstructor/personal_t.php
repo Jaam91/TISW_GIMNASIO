@@ -12,9 +12,10 @@
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'asignacion-instructor-grid',
-	'dataProvider'=>$model->search2("habilitado", "Personal Trainer"),
+	'dataProvider'=>$model->search2(),
 	'filter'=>$model,
 	'columns'=>array(
+		//'rut_usuario',
 		array(
 			'header'=>'Rut Instructor',
 			'name'=>'rut_usuario',
@@ -22,18 +23,20 @@
 		),
 		array(
    			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido." ".$data->segundo_apellido',
-   			'filter'=>'',
+   			'value' =>'$data->primer_nombre',
 		),
+		array(
+   			'name'=>'primer_apellido',
+   			'value' =>'$data->primer_apellido',
+		),
+		/*
 		array(
    			'name'=>'tipo',  // sobreescribir el atributo rol
    			'value' =>'$data->instructor->tipo',
-   			'filter'=>'',
-		),
+		),*/
 		array(
    			'name'=>'horario',  
    			'value' =>'$data->instructor->horario',
-   			'filter'=>'',
 		),
 
 		array(

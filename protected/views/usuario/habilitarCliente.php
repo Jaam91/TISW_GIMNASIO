@@ -26,17 +26,24 @@ $this->menu=array(
 		'rut_usuario',
 		array(
    			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
+   			'value' =>'$data->primer_nombre',
 		),
 		array(
-   			'name'=>'rol',
-   			'value' =>'$data->rol',
-   			'filter'=>false,
+   			'name'=>'primer_apellido',
+   			'value' =>'$data->primer_apellido',
 		),
-		#'profesion',
-		#'fecha_ingreso',
-		#'curriculum_vitae',
+		array(
+			'name'=>'telefono',
+			'value' =>'$data->cliente->telefono_emergencia',
+		),
+		array(
+			'name'=>'peso',
+			'value' =>'$data->cliente->peso',
+		),		
+		array(
+			'name'=>'altura',
+			'value' =>'$data->cliente->altura',
+		),
 		array(
 			'class'=>'CButtonColumn',
 			'template'=> '{habilitar}',

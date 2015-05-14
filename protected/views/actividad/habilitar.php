@@ -35,11 +35,6 @@ $this->menu=array(
    			'filter'=>false,
 		),
 		array(
-   			'name'=>'rut_instructor',
-   			'value' =>'$data->rutUsuario->rutUsuario->primer_nombre." ".$data->rutUsuario->rutUsuario->primer_apellido',
-   			'filter'=>'',
-		),
-		array(
 			'class'=>'CButtonColumn',
 			'template'=> '{habilitar}',
 			'buttons'=>array(

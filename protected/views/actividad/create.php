@@ -16,4 +16,4 @@ $this->menu=array(
 
 <h1>Ingresar Actividad</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'lista'=>$lista, 'lista_d'=>$lista_d, 'lista_i'=>$lista_i)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'lista'=>$lista, 'lista_d'=>$lista_d)); ?>

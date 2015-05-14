@@ -26,21 +26,18 @@ $this->menu=array(
 	'filter'=>$model,
 	'columns'=>array(
 		'rut_usuario',
-		array(
-   			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
-		),
+		'primer_nombre',
+		'primer_apellido',
 		'rol',
 		array(
    			'name'=>'tipo',
    			'value' =>array($this, 'tipoInstructor'),
-   			'filter'=>'',
+   			//'filter'=>'',
 		),
 		array(
 			'name'=>'horario',
 			'value' =>array($this, 'horarioInstructor'),
-			'filter'=>'',
+			//'filter'=>'',
 		),
 		array(
             'class' => 'CButtonColumn',
@@ -49,13 +46,14 @@ $this->menu=array(
 				"update"=>array(
             			'label' => 'modificar',
             			'imageUrl'=>'images/modificar.png',
+            			'url'=>'CHtml::normalizeUrl(array("updatePersonal","id"=>$data->primarykey))',
             			'visible' => '$data->rut_usuario != Yii::app()->user->name',
                         ),
-				"eliminar"=>array(					
+				"eliminar"=>array(
             	            'label'=>'eliminar', // titulo del enlace del botón nuevo
             	            'click'=>'function(){return confirm("¿Está seguro que desea eliminar este Usuario?");}',
 		    				'imageUrl'=>'images/eliminar.png',
-           					'url'=>'CHtml::normalizeUrl(array("delete","id"=>$data->primarykey))',
+           					'url'=>'CHtml::normalizeUrl(array("deletePersonal","id"=>$data->primarykey))',
            					'visible' => '$data->rut_usuario != Yii::app()->user->name',           					
 						),
 				"no_permitido"=>array(

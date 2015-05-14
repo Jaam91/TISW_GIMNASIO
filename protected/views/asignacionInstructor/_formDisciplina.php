@@ -42,3 +42,29 @@ $this->breadcrumbs=array(
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<br><br>
+<br><h3>Lista de Actividadas inscritas por el cliente: <?php echo $nombre?></h3>
+
+<?php if($p_trainer == 1):?>
+	<h5>- Cliente con Personal Trainer</h5>
+<?php endif;	
+
+$this->widget('zii.widgets.grid.CGridView', array(
+	'id'=>'unidad-medica-grid',
+	'dataProvider'=>$actividad,
+	'columns'=>array(
+		array(
+			'header'=>'Nombre Actividad',
+			'name'=>'id_actividad',
+			'value'=>'$data->actividad0->nombre',
+			'filter'=> false,
+		),
+		array(
+			'header'=>'Dependencia',
+			'name'=>'id_dependencia',
+			'value'=>'$data->actividad0->idDependencia->nombre',
+			'filter'=> false,
+		),
+	),
+)); ?>

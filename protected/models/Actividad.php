@@ -22,12 +22,11 @@ class Actividad extends CActiveRecord
 			array('id_dependencia', 'numerical'),
 			array('nombre', 'length', 'max'=>30),
 			array('nombre', 'unique'),
-			array('rut_instructor', 'length', 'max'=>10),
 			array('estado', 'length', 'max'=>12),
 			array('cantidad_clientes', 'numerical'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id_actividad, nombre, id_disciplina, id_dependencia, rut_instructor, estado', 'safe', 'on'=>'search'),
+			array('id_actividad, nombre, id_disciplina, id_dependencia,estado', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -53,7 +52,6 @@ class Actividad extends CActiveRecord
 			'nombre' => 'Nombre',
 			'id_disciplina' => 'Disciplina',
 			'id_dependencia' => 'Id Dependencia',
-			'rut_instructor' => 'Nombre Instructor',
 			'estado' => 'Estado',
 			'cantidad_clientes' => 'Cantidad Clientes',
 		);
@@ -70,7 +68,6 @@ class Actividad extends CActiveRecord
 		$criteria->compare('nombre',$this->nombre,true);
 		$criteria->compare('id_disciplina',$this->id_disciplina);
 		$criteria->compare('id_dependencia',$this->id_dependencia);
-		$criteria->compare('rut_instructor',$this->rut_instructor,true);
 		$criteria->compare('estado','='.$estado,true);
 		$criteria->compare('cantidad_clientes', '='.$this->cantidad_clientes,true);
 
@@ -90,7 +87,17 @@ class Actividad extends CActiveRecord
 		));		
 	}
 
+	public function contarActividad()
+	{
+		$disciplina = Disciplina::model()->tableName();
+		$criteria= new CDbCriteria;
+		$criteria->select= 'id_actividad,t.nombre';
+		$criteria->join = 'left join '.$disciplina.' D on (D.id_disciplina = t.id_disciplina)';	
+		$criteria->condition= 't.estado=:estado AND D.nombre<>:nom';
+		$criteria->params= array(':estado'=>'habilitado', ':nom'=>'Musculación');
 
+		return Actividad::model()->findAll($criteria);
+	}
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);

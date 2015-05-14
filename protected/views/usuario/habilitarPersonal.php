@@ -24,19 +24,19 @@ $this->menu=array(
 	'filter'=>$model,
 	'columns'=>array(
 		'rut_usuario',
+		'primer_nombre',
+		'primer_apellido',
+		'rol',
 		array(
-   			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
+   			'name'=>'tipo',
+   			'value' =>array($this, 'tipoInstructor'),
+
 		),
 		array(
-   			'name'=>'rol',
-   			'value' =>'$data->rol',
-   			'filter'=>false,
+			'name'=>'horario',
+			'value' =>array($this, 'horarioInstructor'),
+
 		),
-		#'profesion',
-		#'fecha_ingreso',
-		#'curriculum_vitae',
 		array(
 			'class'=>'CButtonColumn',
 			'template'=> '{habilitar}',

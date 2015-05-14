@@ -15,6 +15,8 @@ $this->menu=array(
 
 <h2>Gestión de Asignaciones</h2>
 
+<h5>Nota: Sólo se puede modificar el instructor de la Actividad Asignada</h5>
+
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'asignacion-instructor-grid',
@@ -23,24 +25,19 @@ $this->menu=array(
 	'columns'=>array(
 		//'id_asignacion',
 		array(
-   			'name'=>'rut_cliente',
-   			'value' =>'$data->rutCliente->rutUsuario->primer_nombre." ".
-   					  $data->rutCliente->rutUsuario->primer_apellido." ".
-   					  $data->rutCliente->rutUsuario->segundo_apellido',
-   			'filter'=>'',
+   			'name'=>'nombre_cliente',
+   			'value' =>'$data->rutCliente->rutUsuario->primer_nombre." ".$data->rutCliente->rutUsuario->primer_apellido',
 		),
 		array(
-   			'name'=>'rut_instructor',
+   			'name'=>'nombre_instructor',
    			'value' =>'$data->rutInstructor->rutUsuario->primer_nombre." ".
    					  $data->rutInstructor->rutUsuario->primer_apellido." ".
    					  $data->rutInstructor->rutUsuario->segundo_apellido',
-   			'filter'=>'',
 		),
 
     array(
-      'name'=>'id_actividad',
+      'name'=>'nombre_actividad',
       'value' => array($this, 'nombreActividad'),
-      'filter'=>'',
     ),
 		array(
             'class' => 'CButtonColumn',

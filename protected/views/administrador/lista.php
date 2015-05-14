@@ -27,8 +27,11 @@ $this->menu=array(
 		'rut_usuario',
 		array(
    			'name'=>'primer_nombre',
-   			'value' =>'$data->primer_nombre." ".$data->primer_apellido',
-   			'filter'=>'',
+   			'value' =>'$data->primer_nombre',
+		),
+		array(
+   			'name'=>'primer_apellido',
+   			'value' =>'$data->primer_apellido',
 		),
 		#'telefono_emergencia',
 		#'peso',

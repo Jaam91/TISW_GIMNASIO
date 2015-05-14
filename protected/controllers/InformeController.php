@@ -1,6 +1,6 @@
 <?php
 
-class InstructorController extends Controller
+class InformeController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -28,7 +28,7 @@ class InstructorController extends Controller
 	{
 		return array(
 			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
+				'actions'=>array('index','view', 'informe2', 'opcionesModulo'),
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -55,23 +55,22 @@ class InstructorController extends Controller
 			'model'=>$this->loadModel($id),
 		));
 	}
-
-	/**
-	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 */
+	public function actionOpcionesModulo()
+	{
+		$this->render('opcionesModulo');
+	}
 	public function actionCreate()
 	{
-		$model=new Instructor;
+		$model=new Informe;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Instructor']))
+		if(isset($_POST['Informe']))
 		{
-			$model->attributes=$_POST['Instructor'];
+			$model->attributes=$_POST['Informe'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->rut_usuario));
+				$this->redirect(array('view','id'=>$model->id_informe));
 		}
 
 		$this->render('create',array(
@@ -79,11 +78,30 @@ class InstructorController extends Controller
 		));
 	}
 
-	/**
-	 * Updates a particular model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * @param integer $id the ID of the model to be updated
-	 */
+	public function actionInforme2()
+	{
+		$model= Actividad::model()->findAll(array('condition'=>'estado=:estado', 'params'=>array(':estado'=>'habilitado')));
+
+		//Informacion que contendrá el informe2
+
+		///////////////////////////////////////
+
+		//Creación del informe.
+
+		$mPDF1 = Yii::app()->ePdf->mpdf('utf-8','A4','','',15,15,35,25,9,9,'P'); 
+		//$mPDF1->useOnlyCoreFonts = true;
+  		//$mPDF1->SetTitle("Yises - Informe");
+	 	$mPDF1->SetWatermarkText("Gimnasio Hipertrofia");
+	 	$mPDF1->showWatermarkText = true;
+	 	$mPDF1->watermark_font = 'DejaVuSansCondensed';
+	 	$mPDF1->watermarkTextAlpha = 0.1;
+	 	$mPDF1->SetDisplayMode('fullpage');
+	 	$mPDF1->WriteHTML($this->renderPartial('informe2', array('model'=>$model), true));
+	 	$mPDF1->Output('Informe Mensual'.date('YmdHis')-30,'I');
+  		exit;
+
+	}
+	
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
@@ -91,11 +109,11 @@ class InstructorController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Instructor']))
+		if(isset($_POST['Informe']))
 		{
-			$model->attributes=$_POST['Instructor'];
+			$model->attributes=$_POST['Informe'];
 			if($model->save())
-				$this->redirect(array('view','id'=>$model->rut_usuario));
+				$this->redirect(array('view','id'=>$model->id_informe));
 		}
 
 		$this->render('update',array(
@@ -103,11 +121,7 @@ class InstructorController extends Controller
 		));
 	}
 
-	/**
-	 * Deletes a particular model.
-	 * If deletion is successful, the browser will be redirected to the 'admin' page.
-	 * @param integer $id the ID of the model to be deleted
-	 */
+	
 	public function actionDelete($id)
 	{
 		$this->loadModel($id)->delete();
@@ -122,7 +136,7 @@ class InstructorController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Instructor');
+		$dataProvider=new CActiveDataProvider('Informe');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -133,10 +147,10 @@ class InstructorController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Instructor('search');
+		$model=new Informe('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Instructor']))
-			$model->attributes=$_GET['Instructor'];
+		if(isset($_GET['Informe']))
+			$model->attributes=$_GET['Informe'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -147,12 +161,12 @@ class InstructorController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Instructor the loaded model
+	 * @return Informe the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Instructor::model()->findByPk($id);
+		$model=Informe::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -160,11 +174,11 @@ class InstructorController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Instructor $model the model to be validated
+	 * @param Informe $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='instructor-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='informe-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

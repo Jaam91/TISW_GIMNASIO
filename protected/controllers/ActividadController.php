@@ -101,14 +101,6 @@ class ActividadController extends Controller
 		));
 	}
 
-	public function nombreInstructor($data)
-	{
-		if($data->rut_instructor == NULL)
-			return "";		
-		else
-			return Usuario::model()->NombreCompleto($data->rut_instructor);
-	}
-
 
 	public function actionUpdate($id)
 	{

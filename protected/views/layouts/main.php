@@ -33,11 +33,12 @@
 				array('label'=>'Administrar Usuarios', 'url'=>array('/usuario/ingresar'), 'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Registrar Pago', 'url'=>array('/administrador/pago'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Control Asistencia', 'url'=>array('/administrador/asistencia'),'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>'Asignar Instructor', 'url'=>array('/asignacionInstructor/opcion'),'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Asignación Instructor', 'url'=>array('/asignacionInstructor/opcion'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Dependencias', 'url'=>array('/dependencia/opcionesModulo'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Disciplina', 'url'=>array('/disciplina/opcionesModulo'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Actividades', 'url'=>array('/actividad/ingresar','id'=>0),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Implementos', 'url'=>array('/implemento/opcionesModulo'),'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>'Informes', 'url'=>array('/informe/opcionesModulo'),'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),

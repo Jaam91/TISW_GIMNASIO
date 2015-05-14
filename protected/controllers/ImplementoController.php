@@ -52,8 +52,6 @@ class ImplementoController extends Controller
 		$cont=0;
 		$model=new Implemento;
 		$historial=new GestionaImplemento;
-		
-
 		$grupoMuscular = Implemento::model()->grupoMuscular();
 
 

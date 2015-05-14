@@ -21,13 +21,13 @@
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'nombre'); ?>
-		<?php echo $form->textField($model,'nombre',array('size'=>17,'maxlength'=>17)); ?>
+		<?php echo $form->textField($model,'nombre',array('size'=>17,'maxlength'=>17, 'placeholder'=>'Nombre Dependencia')); ?>
 		<?php echo $form->error($model,'nombre'); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'metros_cuadrados'); ?>
-		<?php echo $form->textField($model,'metros_cuadrados',array('size'=>10,'maxlength'=>10)); ?>
+		<?php echo $form->textField($model,'metros_cuadrados',array('size'=>10,'maxlength'=>10, 'placeholder'=>'Ej: 10 x 10')); ?>
 		<?php echo $form->error($model,'metros_cuadrados'); ?>
 	</div>
 

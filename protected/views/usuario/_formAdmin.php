@@ -21,15 +21,7 @@
 
 	<p class="note">Campos con <span class="required">*</span> son requeridos</p>
 
-	<?php echo $form->errorSummary($model); echo $form->errorSummary($admin);
-
-
-	if($id == 4)
-		Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/instructor2.js', CClientScript::POS_END);
-	else
-		Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl . '/js/instructor.js', CClientScript::POS_END);
-    Yii::app()->getClientScript()->registerScript('tipo',CClientScript::POS_END);
- 	?>
+	<?php echo $form->errorSummary($model); echo $form->errorSummary($admin);?>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'rut_usuario'); ?>
@@ -113,26 +105,6 @@
 		<?php echo $form->labelEx($admin,'curriculum_vitae'); ?>
 		<?php echo $form->textField($admin,'curriculum_vitae',array('size'=>50,'maxlength'=>50)); ?>
 		<?php echo $form->error($admin,'curriculum_vitae'); ?>
-	</div>
-
-<?php if($id!=4):?>
-	<div id="rol" class="row">
-		<?php echo $form->labelEx($model,'rol'); ?>
-		<?php echo $form->dropDownList($model,'rol',CHtml::listData($lista,'name','name'),array('empty'=>'Seleccione el Rol')); ?>
-		<?php echo $form->error($model,'rol'); ?>
-	</div>
-<?php endif;?>
-
-	<div id="tipo" class="row">
-		<?php echo $form->labelEx($admin,'tipo'); ?>
-		<?php echo $form->dropDownList($admin,'tipo', CHtml::listData($actividad, 'nombre', 'nombre'), array('empty'=>'Seleccione')); ?>
-		<?php echo $form->error($admin,'tipo'); ?>
-	</div>
-
-	<div id="horario" class="row">
-		<?php echo $form->labelEx($admin,'horario'); ?>
-		<?php echo $form->textField($admin,'horario',array('size'=>30,'maxlength'=>30)); ?>
-		<?php echo $form->error($admin,'horario'); ?>
 	</div>
 
 	<div class="row buttons">

@@ -36,12 +36,6 @@ $this->menu=array(
 		),
 
 		array(
-   			'name'=>'rut_instructor',
-   			'value' => array($this, 'nombreInstructor'),
-   			'filter'=>'',
-		),
-
-		array(
    			'name'=>'cantidad_clientes',
    			'value' =>'$data->cantidad_clientes',
    			'filter'=>'',
